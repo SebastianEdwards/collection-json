@@ -1,27 +1,27 @@
 module CollectionJSON
   class Builder
-    attr_reader :response
+    attr_reader :collection
 
-    def initialize(response)
-      @response = response
+    def initialize(collection)
+      @collection = collection
     end
 
     def set_error(opts = {})
-      response.error = opts
+      collection.error = opts
     end
 
     def set_code(code)
-      response.code = code
+      collection.code = code
     end
 
     def add_link(href, rel, opts = {})
       href = CollectionJSON.add_host(href)
-      response.links << opts.merge({rel: rel, href: href})
+      collection.links << opts.merge({rel: rel, href: href})
     end
 
     def add_item(href, data = [], links = [], &block)
       href = CollectionJSON.add_host(href)
-      response.items << {href: href}.tap do |item|
+      collection.items << {href: href}.tap do |item|
         item_builder = ItemBuilder.new(data, links)
         yield(item_builder) if block_given?
         item.merge!({data: item_builder.data}) if item_builder.data.length > 0
@@ -31,7 +31,7 @@ module CollectionJSON
 
     def add_query(href, rel, prompt = '', data = [], &block)
       href = CollectionJSON.add_host(href)
-      response.queries << {href: href, rel: rel}.tap do |query|
+      collection.queries << {href: href, rel: rel}.tap do |query|
         query_builder = QueryBuilder.new(data)
         yield(query_builder) if block_given?
         query.merge!({prompt: prompt}) if prompt != ''
@@ -40,7 +40,7 @@ module CollectionJSON
     end
 
     def set_template(data = [], &block)
-      response.template = Hash.new.tap do |template|
+      collection.template = Hash.new.tap do |template|
         template_builder = TemplateBuilder.new(data)
         yield(template_builder) if block_given?
         template.merge!({data: template_builder.data}) if template_builder.data.length > 0
