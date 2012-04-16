@@ -1,9 +1,17 @@
-require 'json'
-
 module CollectionJSON
   class Collection
     attr_reader :href, :links, :items, :queries, :template, :version, :error
     attr_writer :links, :items, :queries, :template, :version, :error
+
+    def self.from_hash(hash)
+      self.new(hash[ROOT_NODE]['href']).tap do |collection|
+        %w{items links queries error template}.each do |attribute|
+          if hash[ROOT_NODE][attribute]
+            collection.send("#{attribute}=", hash[ROOT_NODE][attribute])
+          end
+        end
+      end
+    end
 
     def initialize(href)
       @href = CollectionJSON.add_host(href)

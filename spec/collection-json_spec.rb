@@ -79,4 +79,38 @@ describe CollectionJSON do
       response.queries.first[:data].first[:name].should eq('search')
     end
   end
+
+  describe :parse do
+    before(:all) do
+      json = '{"collection": {
+        "href": "http://www.example.org/friends",
+        "items": [
+          {
+            "href": "http://www.example.org/m.rowe",
+            "data": [
+              {"name": "full-name", "value": "Matt Rowe"}
+            ]
+          }
+        ]
+      }}'
+      @collection = CollectionJSON.parse(json)
+    end
+
+    it 'should parse JSON into a Collection' do
+      @collection.class.should eq(CollectionJSON::Collection)
+    end
+
+    it 'should have correct href' do
+      @collection.href.should eq("http://www.example.org/friends")
+    end
+
+    it 'should handle the nested attributes' do
+      @collection.items.first['href'].should eq("http://www.example.org/m.rowe")
+      @collection.items.first['data'].count.should eq(1)
+    end
+
+    it 'should be able to be reserialized' do
+      @collection.to_json.class.should eq(String)
+    end
+  end
 end

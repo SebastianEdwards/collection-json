@@ -1,3 +1,4 @@
+require 'json'
 require "collection-json/version"
 require "collection-json/collection"
 require "collection-json/builder"
@@ -22,5 +23,10 @@ module CollectionJSON
     else
       href
     end
+  end
+
+  def self.parse(json)
+    hash = JSON.parse(json)
+    collection = Collection.from_hash(hash)
   end
 end
