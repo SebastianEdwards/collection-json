@@ -15,6 +15,15 @@ module CollectionJSON
       @template = nil
     end
 
+    def collection
+      {ROOT_NODE => body}
+    end
+
+    def to_json(*args)
+      collection.to_json(args)
+    end
+
+    private
     def body
       {href: href, version: version}.tap do |body|
         %w{items links queries}.each do |child_name|
@@ -24,14 +33,6 @@ module CollectionJSON
         body.merge!({error: error}) if error
         body.merge!({template: template}) if template
       end
-    end
-
-    def collection
-      {ROOT_NODE => body}
-    end
-
-    def to_json(*args)
-      collection.to_json(args)
     end
   end
 end
