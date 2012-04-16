@@ -3,7 +3,7 @@ require 'json'
 module CollectionJSON
   class Collection
     attr_reader :href, :links, :items, :queries, :template, :version, :error
-    attr_writer :links, :items, :queries, :template, :version, :error    
+    attr_writer :links, :items, :queries, :template, :version, :error
 
     def initialize(href)
       @href = CollectionJSON.add_host(href)
