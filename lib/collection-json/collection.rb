@@ -27,7 +27,7 @@ module CollectionJSON
     end
 
     def collection
-      {collection: body}
+      {ROOT_NODE => body}
     end
 
     def to_json(*args)

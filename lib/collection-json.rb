@@ -3,6 +3,7 @@ require "collection-json/collection"
 require "collection-json/builder"
 
 COLLECTION_JSON_VERSION = "1.0"
+ROOT_NODE = 'collection'
 
 module CollectionJSON
   def self.generate_for(href, &block)
