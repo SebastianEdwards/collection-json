@@ -18,9 +18,12 @@ module CollectionJSON
     def prompt; self['prompt']; end
     def prompt=(value); self['prompt'] = value; end
 
-    def data; self['data']; end
+    def data
+      self['data'].map {|data| Data.from_hash(data)}
+    end
+
     def data=(array)
-      self['data'] = array.map {|data| Data.from_hash(data)}
+      self['data'] = array
     end
 
     def build(params = {})

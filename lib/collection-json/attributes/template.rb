@@ -6,9 +6,13 @@ module CollectionJSON
       self.new.merge! hash
     end
 
-    def data; self['data']; end
+    def data
+      self['data'].map {|data| Data.from_hash(data)}
+    end
+
     def data=(array)
-      self['data'] = array.map {|data| Data.from_hash(data)}
+      self['data'] = array
+    end
     end
   end
 end

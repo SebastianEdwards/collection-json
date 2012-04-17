@@ -10,14 +10,20 @@ module CollectionJSON
     def href; self['href']; end
     def href=(value); self['href'] = value; end
 
-    def links; self['links']; end
-    def links=(array)
-      self['links'] = array.map {|link| Link.from_hash(link)}
+    def links
+      self['links'].map {|link| Link.from_hash(link)}
     end
 
-    def data; self['data']; end
+    def links=(array)
+      self['links'] = array
+    end
+
+    def data
+      self['data'].map {|data| Data.from_hash(data)}
+    end
+
     def data=(array)
-      self['data'] = array.map {|data| Data.from_hash(data)}
+      self['data'] = array
     end
   end
 end
