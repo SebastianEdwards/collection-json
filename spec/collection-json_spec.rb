@@ -68,15 +68,16 @@ describe CollectionJSON do
       end
 
       response.href.should eq('/friends/')
+      response.links.first.href.should eq("/friends/rss")
       response.items.length.should eq(3)
-      response.items.first[:data].length.should eq(2)
-      response.items.first[:links].length.should eq(2)
-      response.items.first[:href].class.should eq(String)
-      response.template[:data].length.should eq(4)
+      response.items.first.data.length.should eq(2)
+      response.items.first.links.length.should eq(2)
+      response.items.first.href.class.should eq(String)
+      response.template.data.length.should eq(4)
       response.queries.length.should eq(1)
-      response.queries.first[:href].should eq("/friends/search")
-      response.queries.first[:data].length.should eq(1)
-      response.queries.first[:data].first[:name].should eq('search')
+      response.queries.first.href.should eq("/friends/search")
+      response.queries.first.data.length.should eq(1)
+      response.queries.first.data.first.name.should eq('search')
     end
   end
 
@@ -84,6 +85,9 @@ describe CollectionJSON do
     before(:all) do
       json = '{"collection": {
         "href": "http://www.example.org/friends",
+        "links": [
+          {"rel": "feed", "href": "http://www.example.org/friends.rss"}
+        ],
         "items": [
           {
             "href": "http://www.example.org/m.rowe",
@@ -105,12 +109,16 @@ describe CollectionJSON do
     end
 
     it 'should handle the nested attributes' do
-      @collection.items.first['href'].should eq("http://www.example.org/m.rowe")
-      @collection.items.first['data'].count.should eq(1)
+      @collection.items.first.href.should eq("http://www.example.org/m.rowe")
+      @collection.items.first.data.count.should eq(1)
     end
 
     it 'should be able to be reserialized' do
       @collection.to_json.class.should eq(String)
+    end
+
+    it 'should have the correct link' do
+      @collection.links.first.href.should eq("http://www.example.org/friends.rss")
     end
   end
 end
