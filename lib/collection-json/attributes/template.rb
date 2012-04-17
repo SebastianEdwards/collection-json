@@ -13,6 +13,18 @@ module CollectionJSON
     def data=(array)
       self['data'] = array
     end
+
+    def build(params = {})
+      self.dup.tap do |result|
+        result.data.each do |data|
+          data.select! {|k,v| %w{name value}.include?(k)}
+          data.value = params[data.name] if params[data.name]
+        end
+      end
+    end
+
+    def to_json(*args)
+      {template: Hash.new.merge!(self)}.to_json(args)
     end
   end
 end
