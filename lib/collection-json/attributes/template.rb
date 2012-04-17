@@ -20,11 +20,7 @@ module CollectionJSON
         result['value'] = params[data.name] if params[data.name]
         result['value'] != nil ? array << result : array
       end
-      self.class.from_hash({data: data})
-    end
-
-    def to_json(*args)
-      {template: Hash.new.merge!(self)}.to_json(args)
+      { 'template' => { 'data' => data } }
     end
   end
 end
