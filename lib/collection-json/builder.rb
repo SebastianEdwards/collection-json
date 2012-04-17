@@ -16,7 +16,10 @@ module CollectionJSON
 
     def add_link(href, rel, opts = {})
       href = CollectionJSON.add_host(href)
-      collection.links << opts.merge({rel: rel, href: href})
+
+      opts.select! {|k,v| VALID_LINK_ATTRIBUTES.include? k}
+      opts.merge!({'rel' => rel, 'href' => href})
+      collection.links << Link.from_hash(opts)
     end
 
     def add_item(href, data = [], links = [], &block)

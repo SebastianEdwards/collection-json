@@ -6,6 +6,8 @@ require "collection-json/builder"
 COLLECTION_JSON_VERSION = "1.0"
 ROOT_NODE = 'collection'
 
+VALID_LINK_ATTRIBUTES = %w{href rel name render prompt}.map(&:to_sym)
+
 module CollectionJSON
   def self.generate_for(href, &block)
     response = Collection.new(href)
