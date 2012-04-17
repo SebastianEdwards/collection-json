@@ -1,5 +1,5 @@
 module CollectionJSON
-  class Link < Hash
+  class Error < Hash
     def self.from_hash(hash)
       self.new.merge! hash
     end
