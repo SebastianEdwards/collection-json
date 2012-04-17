@@ -24,7 +24,7 @@ module CollectionJSON
 
     def add_item(href, data = [], links = [], &block)
       href = CollectionJSON.add_host(href)
-      collection.items << {'href' => href}.tap do |item|
+      collection.items << Item.from_hash({'href' => href}).tap do |item|
         item_builder = ItemBuilder.new(data, links)
         yield(item_builder) if block_given?
         item.merge!({'data' => item_builder.data}) if item_builder.data.length > 0
@@ -34,7 +34,7 @@ module CollectionJSON
 
     def add_query(href, rel, prompt = '', data = [], &block)
       href = CollectionJSON.add_host(href)
-      collection.queries << {'href' => href, 'rel' => rel}.tap do |query|
+      collection.queries << Query.from_hash({'href' => href, 'rel' => rel}).tap do |query|
         query_builder = QueryBuilder.new(data)
         yield(query_builder) if block_given?
         query.merge!({'prompt' => prompt}) if prompt != ''
@@ -43,7 +43,7 @@ module CollectionJSON
     end
 
     def set_template(data = [], &block)
-      collection.template = Hash.new.tap do |template|
+      collection.template = Template.new.tap do |template|
         template_builder = TemplateBuilder.new(data)
         yield(template_builder) if block_given?
         template.merge!({'data' => template_builder.data}) if template_builder.data.length > 0
@@ -68,7 +68,7 @@ module CollectionJSON
 
     def add_link(href, rel, name = '', prompt = '', render = '')
       href = CollectionJSON.add_host(href)
-      links << {'href' => href, 'rel' => rel}.tap do |link|
+      links << Link.from_hash({'href' => href, 'rel' => rel}).tap do |link|
         link.merge!({'name' => name}) if name != ''
         link.merge!({'prompt' => prompt}) if prompt != ''
         link.merge!({'render' => render}) if render != ''
@@ -84,7 +84,7 @@ module CollectionJSON
     end
 
     def add_data(name, value = '', prompt = '')
-      data << {'name' => name}.tap do |data|
+      data << Data.from_hash({'name' => name}).tap do |data|
         data.merge!({'value' => value}) if value != ''
         data.merge!({'prompt' => prompt}) if prompt != ''
       end
@@ -99,7 +99,7 @@ module CollectionJSON
     end
 
     def add_data(name, value = '', prompt = '')
-      data << {'name' => name}.tap do |data|
+      data << Data.from_hash({'name' => name}).tap do |data|
         data.merge!({'value' => value}) if value != ''
         data.merge!({'prompt' => prompt}) if prompt != ''
       end
