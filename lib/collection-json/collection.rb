@@ -1,7 +1,13 @@
+require_relative 'attributes/link'
+require_relative 'attributes/item'
+require_relative 'attributes/query'
+require_relative 'attributes/error'
+require_relative 'attributes/template'
+
 module CollectionJSON
   class Collection
     attr_reader :href, :links, :items, :queries, :template, :version, :error
-    attr_writer :links, :items, :queries, :template, :version, :error
+    attr_writer :version
 
     def self.from_hash(hash)
       self.new(hash[ROOT_NODE]['href']).tap do |collection|
@@ -21,6 +27,26 @@ module CollectionJSON
       @queries = []
       @error = nil
       @template = nil
+    end
+
+    def items=(array)
+      @items = array.map {|item| Item.from_hash(item)}
+    end
+
+    def links=(array)
+      @links = array.map {|link| Link.from_hash(link)}
+    end
+
+    def queries=(array)
+      @queries = array.map {|query| Query.from_hash(query)}
+    end
+
+    def template=(template)
+      @template = Template.from_hash(template)
+    end
+
+    def error=(error)
+      @error = Error.from_hash(error)
     end
 
     def collection
