@@ -1,6 +1,6 @@
 # CollectionJSON
 
-A lightweight gem to easily build response objects with a MIME type of
+A lightweight gem to easily build and parse response objects with a MIME type of
 'application/vnd.collection+json'.
 
 Read http://amundsen.com/media-types/collection/ for more information about this
@@ -8,11 +8,13 @@ media type.
 
 ## Usage
 
+### Building
+
 Use ```CollectionJSON.generate_for``` to build a response object which you can
 call ```to_json``` on.
 
 ```ruby
-response = CollectionJSON.generate_for('/friends/') do |builder|
+collection = CollectionJSON.generate_for('/friends/') do |builder|
   builder.add_link '/friends/rss', 'feed'
   user.friends.each do |friend|
     builder.add_item("/friends/#{friend.id}") do |item|
@@ -33,10 +35,10 @@ response = CollectionJSON.generate_for('/friends/') do |builder|
   end
 end
 
-response.to_json
+collection.to_json
 ```
 
-Sample output:
+Output:
 
 ```javascript
 { "collection" :
@@ -98,7 +100,7 @@ Sample output:
     "queries" : [
       {"rel" : "search", "href" : "http://example.org/friends/search", "prompt" : "Search",
         "data" : [
-          {"name" : "search"}
+          {"name" : "q", "prompt" : "Search Query"}
         ]
       }
     ],
@@ -115,6 +117,50 @@ Sample output:
   } 
 }
 ```
+
+### Parsing
+
+CollectionJSON also helps you to consume APIs by parsing JSON strings:
+
+```ruby
+collection = CollectionJSON.parse(json)
+collection.href # => "http://example.org/friends/"
+collection.items.count # => 3
+```
+
+You can then build queries:
+
+```ruby
+collection.queries.first.build({'search' => 'puppies'}) # => "http://example.org/friends/search?q=puppies"
+```
+
+It also builds templates:
+
+```ruby
+built_template = collection.template.build({"full-name" => "Lol Cat", "email" => "lol@cats.com"})
+built_template.to_json
+```
+
+Output:
+
+```javascript
+{
+  "template" : {
+    "data" : [
+      {
+        "name" : "full-name",
+        "value" : "Lol Cat"
+      },
+      {
+        "name" : "email",
+        "value" : "lol@cats.com"
+      }
+    ]
+  }
+}
+```
+
+## Notes
 
 Set the ```COLLECTION_JSON_HOST``` environment variable to automatically add
 this to the href's. Eg. ```COLLECTION_JSON_HOST=http://example.org```
