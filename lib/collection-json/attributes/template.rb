@@ -15,13 +15,12 @@ module CollectionJSON
     end
 
     def build(params = {})
-      self.dup.tap do |result|
-        result.data = result.data.map do |data|
-          data.select! {|k,v| %w{name value}.include?(k)}
-          data.value = params[data.name] if params[data.name]
-          data
-        end
+      data = self.data.inject([]) do |array,data|
+        result = data.select {|k,v| %w{name value}.include?(k)}
+        result['value'] = params[data.name] if params[data.name]
+        result['value'] != nil ? array << result : array
       end
+      self.class.from_hash({data: data})
     end
 
     def to_json(*args)
