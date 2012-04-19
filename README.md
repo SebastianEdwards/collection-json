@@ -18,20 +18,20 @@ collection = CollectionJSON.generate_for('/friends/') do |builder|
   builder.add_link '/friends/rss', 'feed'
   user.friends.each do |friend|
     builder.add_item("/friends/#{friend.id}") do |item|
-      item.add_data "full-name", {"value" => friend.full_name}
-      item.add_data "email", {"value" => friend.email}
-      item.add_link "/blogs/#{friend.id}", "blog", {"prompt" => "Blog"}
-      item.add_link "/blogs/#{friend.id}", "avatar", {"prompt" => "Avatar", "render" => "image"}
+      item.add_data "full-name", {value: friend.full_name}
+      item.add_data "email", {value: friend.email}
+      item.add_link "/blogs/#{friend.id}", "blog", {prompt: "Blog"}
+      item.add_link "/blogs/#{friend.id}", "avatar", {prompt: "Avatar", render: "image"}
     end
   end
-  builder.add_query("/friends/search", "search", {"prompt" => "Search"}) do |query|
+  builder.add_query("/friends/search", "search", {prompt: "Search"}) do |query|
     query.add_data "search"
   end
   builder.set_template do |template|
-    template.add_data "full-name", {"prompt" => "Full Name"}
-    template.add_data "email", {"prompt" => "Email"}
-    template.add_data "blog", {"prompt" => "Blog"}
-    template.add_data "avatar", {"prompt" => "Avatar"}
+    template.add_data "full-name", {prompt: "Full Name"}
+    template.add_data "email", {prompt: "Email"}
+    template.add_data "blog", {prompt: "Blog"}
+    template.add_data "avatar", {prompt: "Avatar"}
   end
 end
 
