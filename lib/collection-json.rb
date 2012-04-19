@@ -8,14 +8,13 @@ ROOT_NODE = 'collection'
 
 module CollectionJSON
   def self.generate_for(href, &block)
-    response = Collection.new
-    response.href href
-    if block_given?
-      builder = Builder.new(response)
-      yield(builder)
+    Collection.new.tap do |response|
+      response.href href
+      if block_given?
+        builder = Builder.new(response)
+        yield(builder)
+      end
     end
-
-    response
   end
 
   def self.add_host(href)
