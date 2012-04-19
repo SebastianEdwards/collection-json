@@ -17,14 +17,6 @@ module CollectionJSON
     end
   end
 
-  def self.add_host(href)
-    if ENV['COLLECTION_JSON_HOST'] && !href[/^http/]
-      ENV['COLLECTION_JSON_HOST'] + href
-    else
-      href
-    end
-  end
-
   def self.parse(json)
     hash = JSON.parse(json)
     collection = Collection.from_hash(hash[ROOT_NODE])

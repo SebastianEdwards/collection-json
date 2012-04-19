@@ -2,28 +2,6 @@ require 'spec_helper'
 require 'collection-json'
 
 describe CollectionJSON do
-  describe :add_host do
-    before :each do
-      @href = '/friends'
-    end
-
-    context 'with COLLECTION_JSON_HOST set' do
-      it 'returns full uri' do
-        ENV['COLLECTION_JSON_HOST'] = EXAMPLE_HOST
-        uri = CollectionJSON.add_host(@href)
-        uri.should eq("http://localhost/friends")
-      end
-    end
-
-    context 'without COLLECTION_JSON_HOST set' do
-      it 'returns partial uri' do
-        ENV['COLLECTION_JSON_HOST'] = nil
-        uri = CollectionJSON.add_host(@href)
-        uri.should eq("/friends")
-      end
-    end
-  end
-
   describe :generate_for do
     before :each do
       @friends = [
