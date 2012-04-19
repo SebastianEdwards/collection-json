@@ -20,10 +20,10 @@ module CollectionJSON
             instance_variable_set(:"@#{name}", arg)
           end
         else
-          unless instance_variable_get(:"@#{name}").nil?
-             instance_variable_get(:"@#{name}")
+          if instance_variable_get(:"@#{name}").nil? && opts[:default]
+            instance_variable_set(:"@#{name}", opts[:default].dup)
            else
-            opts[:default]
+            instance_variable_get(:"@#{name}")
           end
         end
       end
