@@ -1,16 +1,15 @@
 require 'json'
 require "collection-json/version"
-require "collection-json/collection"
+require "collection-json/attributes/collection"
 require "collection-json/builder"
 
 COLLECTION_JSON_VERSION = "1.0"
 ROOT_NODE = 'collection'
 
-VALID_LINK_ATTRIBUTES = %w{href rel name render prompt}.map(&:to_sym)
-
 module CollectionJSON
   def self.generate_for(href, &block)
-    response = Collection.new(href)
+    response = Collection.new
+    response.href href
     if block_given?
       builder = Builder.new(response)
       yield(builder)
@@ -29,6 +28,6 @@ module CollectionJSON
 
   def self.parse(json)
     hash = JSON.parse(json)
-    collection = Collection.from_hash(hash)
+    collection = Collection.from_hash(hash[ROOT_NODE])
   end
 end

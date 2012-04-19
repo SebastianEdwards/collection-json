@@ -27,6 +27,7 @@ describe CollectionJSON::Template do
       json = result.to_json
       hash = JSON.parse(json)
       hash['template']['data'].length.should eq(2)
+      hash['template']['data'].first.keys.length.should eq(2)
     end
   end
 end

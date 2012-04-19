@@ -6,48 +6,47 @@ module CollectionJSON
       @collection = collection
     end
 
-    def set_error(opts = {})
-      collection.error = opts
+    def set_error(params = {})
+      collection.error = params
     end
 
-    def set_code(code)
-      collection.code = code
+    def add_link(href, rel, params = {})
+      params.merge!({'rel' => rel, 'href' => href})
+      collection.links << Link.from_hash(params)
     end
 
-    def add_link(href, rel, opts = {})
-      href = CollectionJSON.add_host(href)
-
-      opts.select! {|k,v| VALID_LINK_ATTRIBUTES.include? k}
-      opts.merge!({'rel' => rel, 'href' => href})
-      collection.links << Link.from_hash(opts)
-    end
-
-    def add_item(href, data = [], links = [], &block)
-      href = CollectionJSON.add_host(href)
-      collection.items << Item.from_hash({'href' => href}).tap do |item|
-        item_builder = ItemBuilder.new(data, links)
-        yield(item_builder) if block_given?
-        item.merge!({'data' => item_builder.data}) if item_builder.data.length > 0
-        item.merge!({'links' => item_builder.links}) if item_builder.links.length > 0
+    def add_item(href, params = {}, &block)
+      params.merge!({'href' => href})
+      collection.items << Item.from_hash(params).tap do |item|
+        if block_given?
+          data = []
+          links = []
+          item_builder = ItemBuilder.new(data, links)
+          yield(item_builder)
+          item.data data
+          item.links links
+        end
       end
     end
 
-    def add_query(href, rel, prompt = '', data = [], &block)
-      href = CollectionJSON.add_host(href)
-      collection.queries << Query.from_hash({'href' => href, 'rel' => rel}).tap do |query|
+    def add_query(href, rel, params = {}, &block)
+      params.merge!({'href' => href, 'rel' => rel})
+      collection.queries << Query.from_hash(params).tap do |query|
+        data = []
         query_builder = QueryBuilder.new(data)
         yield(query_builder) if block_given?
-        query.merge!({'prompt' => prompt}) if prompt != ''
-        query.merge!({'data' => query_builder.data}) if query_builder.data.length > 0
+        query.data data
       end
     end
 
-    def set_template(data = [], &block)
-      collection.template = Template.new.tap do |template|
+    def set_template(params = {}, &block)
+      if block_given?
+        data = params['data'] || []
         template_builder = TemplateBuilder.new(data)
-        yield(template_builder) if block_given?
-        template.merge!({'data' => template_builder.data}) if template_builder.data.length > 0
+        yield(template_builder) 
+        params.merge!({'data' => data})
       end
+      collection.template params
     end
   end
 
@@ -59,20 +58,14 @@ module CollectionJSON
       @links = links
     end
 
-    def add_data(name, value = '', prompt = '')
-      data << {name: name}.tap do |data|
-        data.merge!({'value' => value}) if value != ''
-        data.merge!({'prompt' => prompt}) if prompt != ''
-      end
+    def add_data(name, params = {})
+      params.merge!({'name' => name})
+      data << params
     end
 
-    def add_link(href, rel, name = '', prompt = '', render = '')
-      href = CollectionJSON.add_host(href)
-      links << Link.from_hash({'href' => href, 'rel' => rel}).tap do |link|
-        link.merge!({'name' => name}) if name != ''
-        link.merge!({'prompt' => prompt}) if prompt != ''
-        link.merge!({'render' => render}) if render != ''
-      end
+    def add_link(href, rel, params = {})
+      params.merge!({'rel' => rel, 'href' => href})
+      links << params
     end
   end
 
@@ -83,11 +76,9 @@ module CollectionJSON
       @data = data
     end
 
-    def add_data(name, value = '', prompt = '')
-      data << Data.from_hash({'name' => name}).tap do |data|
-        data.merge!({'value' => value}) if value != ''
-        data.merge!({'prompt' => prompt}) if prompt != ''
-      end
+    def add_data(name, params = {})
+      params.merge!({'name' => name})
+      data << params
     end
   end
 
@@ -98,11 +89,9 @@ module CollectionJSON
       @data = data
     end
 
-    def add_data(name, value = '', prompt = '')
-      data << Data.from_hash({'name' => name}).tap do |data|
-        data.merge!({'value' => value}) if value != ''
-        data.merge!({'prompt' => prompt}) if prompt != ''
-      end
+    def add_data(name, params = {})
+      params.merge!({'name' => name})
+      data << params
     end
   end
 end
