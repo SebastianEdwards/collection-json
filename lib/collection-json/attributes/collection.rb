@@ -20,6 +20,6 @@ module CollectionJSON
               transform:  lambda { |queries| queries.each.map { |q| Query.from_hash(q) }},
               default:    []
     attribute :template, transform: lambda { |template| Template.from_hash(template) }
-    attribute :error, transform: lambda { |template| Error.from_hash(template) }
+    attribute :error, transform: lambda { |error| Error.from_hash(error) }
   end
 end
