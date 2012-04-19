@@ -1,23 +1,21 @@
 module CollectionJSON
   class Builder
-    attr_reader :collection
-
     def initialize(collection)
       @collection = collection
     end
 
     def set_error(params = {})
-      collection.error = params
+      @collection.error = params
     end
 
     def add_link(href, rel, params = {})
       params.merge!({'rel' => rel, 'href' => href})
-      collection.links << Link.from_hash(params)
+      @collection.links << Link.from_hash(params)
     end
 
     def add_item(href, params = {}, &block)
       params.merge!({'href' => href})
-      collection.items << Item.from_hash(params).tap do |item|
+      @collection.items << Item.from_hash(params).tap do |item|
         if block_given?
           data = []
           links = []
@@ -31,7 +29,7 @@ module CollectionJSON
 
     def add_query(href, rel, params = {}, &block)
       params.merge!({'href' => href, 'rel' => rel})
-      collection.queries << Query.from_hash(params).tap do |query|
+      @collection.queries << Query.from_hash(params).tap do |query|
         data = []
         query_builder = QueryBuilder.new(data)
         yield(query_builder) if block_given?
@@ -46,7 +44,7 @@ module CollectionJSON
         yield(template_builder) 
         params.merge!({'data' => data})
       end
-      collection.template params
+      @collection.template params
     end
   end
 
