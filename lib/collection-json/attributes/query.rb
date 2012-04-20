@@ -5,6 +5,8 @@ module CollectionJSON
   class Query < Attribute
     attribute :href, transform: URI
     attribute :rel
+    attribute :name
+    attribute :prompt
     attribute :data,
               transform:  lambda { |data| data.each.map { |d| Data.from_hash(d) }},
               default:    []
