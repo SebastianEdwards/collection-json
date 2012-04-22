@@ -27,6 +27,7 @@ module CollectionJSON
           end
         end
       end
+      add_find_method(name, opts[:find_method]) if opts.has_key?(:find_method)
     end
 
     def self.root_node(value = nil)
@@ -55,6 +56,17 @@ module CollectionJSON
     end
 
     private
+    def self.add_find_method(name, opts)
+      opts = {method_name: opts} unless opts.is_a?(Hash)
+      opts[:key] ||= 'rel'
+      define_method(opts[:method_name]) do |*args|
+        send(name).select do |element|
+          value = element.send opts[:key]
+          args.include? value
+        end.first
+      end
+    end
+
     def skip_value?(value)
       value.nil? || value.respond_to?(:length) && value.length == 0
     end

@@ -12,13 +12,15 @@ module CollectionJSON
     attribute :version
     attribute :links,
               transform:  lambda { |links| links.each.map { |l| Link.from_hash(l) }},
-              default:    []
+              default:    [],
+              find_method:    :link
     attribute :items,
               transform:  lambda { |items| items.each.map { |i| Item.from_hash(i) }},
               default:    []
     attribute :queries,
               transform:  lambda { |queries| queries.each.map { |q| Query.from_hash(q) }},
-              default:    []
+              default:    [],
+              find_method:    :query
     attribute :template, transform: lambda { |template| Template.from_hash(template) }
     attribute :error, transform: lambda { |error| Error.from_hash(error) }
   end

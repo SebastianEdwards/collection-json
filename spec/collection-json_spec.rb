@@ -47,8 +47,10 @@ describe CollectionJSON do
 
       response.href.should eq('/friends/')
       response.links.first.href.should eq("/friends/rss")
+      response.link('feed').href.should eq("/friends/rss")
       response.items.length.should eq(3)
       response.items.first.data.length.should eq(2)
+      response.items.first.datum('full-name').value.should eq("J. Doe")
       response.items.first.links.length.should eq(2)
       response.items.first.href.class.should eq(String)
       response.template.data.length.should eq(4)
@@ -56,6 +58,7 @@ describe CollectionJSON do
       response.queries.first.href.should eq("/friends/search")
       response.queries.first.data.length.should eq(1)
       response.queries.first.data.first.name.should eq('search')
+      response.query('search').prompt.should eq('Search')
     end
   end
 
