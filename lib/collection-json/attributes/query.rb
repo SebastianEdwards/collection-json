@@ -22,7 +22,7 @@ module CollectionJSON
     def add_query_params(query, params)
       query << params.keys.inject('') do |query, key|
         query.tap do |query_string|
-          unless data.map(&name).include?(key)
+          unless data.map(&name).include?(key.to_s)
             query << '&' unless key == params.keys.first
             query << CGI.escape(key.to_s)
             query << "=#{CGI.escape(params[key].to_s)}"
