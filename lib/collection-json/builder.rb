@@ -5,7 +5,7 @@ module CollectionJSON
     end
 
     def set_error(params = {})
-      @collection.error = params
+      @collection.error params
     end
 
     def add_link(href, rel, params = {})
