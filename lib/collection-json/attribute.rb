@@ -52,7 +52,7 @@ module CollectionJSON
     end
 
     def to_json(*args)
-      to_hash.to_json(args)
+      to_hash.to_json(*args)
     end
 
     private
