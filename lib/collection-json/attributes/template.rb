@@ -11,9 +11,13 @@ module CollectionJSON
       {'template' => Hash.new}.tap do |hash|
         hash['template']['data'] = data.inject([]) do |array,data|
           result = {'name' => data.name, 'value' => data.value}
-          result['value'] = params[data.name] unless params[data.name].nil?
-          result['value'] = params[data.name.to_sym] unless params[data.name.to_sym].nil?
-          result['value'].nil? ? array : array << result
+          result['value'] = params[data.name] if params.has_key?(data.name)
+          result['value'] = params[data.name.to_sym] if params.has_key?(data.name.to_sym)
+          if params.has_key?(data.name) || params.has_key?(data.name.to_sym)
+            array << result
+          else
+            array
+          end
         end
       end
     end
