@@ -13,7 +13,7 @@ module CollectionJSON
     def self.attribute(name, opts={})
       nested_attributes << name
       define_method(name) do |arg=nil|
-        if arg
+        if arg != nil
           if opts[:transform]
             instance_variable_set(:"@#{name}", opts[:transform].call(arg))
           else
