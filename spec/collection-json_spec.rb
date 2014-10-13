@@ -45,20 +45,20 @@ describe CollectionJSON do
         end
       end
 
-      response.href.should eq('/friends/')
-      response.links.first.href.should eq("/friends/rss")
-      response.link('feed').href.should eq("/friends/rss")
-      response.items.length.should eq(3)
-      response.items.first.data.length.should eq(2)
-      response.items.first.datum('full-name').value.should eq("J. Doe")
-      response.items.first.links.length.should eq(2)
-      response.items.first.href.class.should eq(String)
-      response.template.data.length.should eq(4)
-      response.queries.length.should eq(1)
-      response.queries.first.href.should eq("/friends/search")
-      response.queries.first.data.length.should eq(1)
-      response.queries.first.data.first.name.should eq('search')
-      response.query('search').prompt.should eq('Search')
+      expect(response.href).to eq('/friends/')
+      expect(response.links.first.href).to eq("/friends/rss")
+      expect(response.link('feed').href).to eq("/friends/rss")
+      expect(response.items.length).to eq(3)
+      expect(response.items.first.data.length).to eq(2)
+      expect(response.items.first.datum('full-name').value).to eq("J. Doe")
+      expect(response.items.first.links.length).to eq(2)
+      expect(response.items.first.href.class).to eq(String)
+      expect(response.template.data.length).to eq(4)
+      expect(response.queries.length).to eq(1)
+      expect(response.queries.first.href).to eq("/friends/search")
+      expect(response.queries.first.data.length).to eq(1)
+      expect(response.queries.first.data.first.name).to eq('search')
+      expect(response.query('search').prompt).to eq('Search')
     end
   end
 
@@ -82,24 +82,24 @@ describe CollectionJSON do
     end
 
     it 'should parse JSON into a Collection' do
-      @collection.class.should eq(CollectionJSON::Collection)
+      expect(@collection.class).to eq(CollectionJSON::Collection)
     end
 
     it 'should have correct href' do
-      @collection.href.should eq("http://www.example.org/friends")
+      expect(@collection.href).to eq("http://www.example.org/friends")
     end
 
     it 'should handle the nested attributes' do
-      @collection.items.first.href.should eq("http://www.example.org/m.rowe")
-      @collection.items.first.data.count.should eq(1)
+      expect(@collection.items.first.href).to eq("http://www.example.org/m.rowe")
+      expect(@collection.items.first.data.count).to eq(1)
     end
 
     it 'should be able to be reserialized' do
-      @collection.to_json.class.should eq(String)
+      expect(@collection.to_json.class).to eq(String)
     end
 
     it 'should have the correct link' do
-      @collection.links.first.href.should eq("http://www.example.org/friends.rss")
+      expect(@collection.links.first.href).to eq("http://www.example.org/friends.rss")
     end
   end
 end
