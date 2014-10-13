@@ -25,6 +25,7 @@ describe CollectionJSON do
 
     it 'should generate an object with the attributes we expect' do
       response = CollectionJSON.generate_for('/friends/') do |builder|
+        builder.set_version '1.1'
         builder.add_link '/friends/rss', 'feed'
         @friends.each do |friend|
           builder.add_item("/friends/#{friend['id']}") do |item|
@@ -45,6 +46,7 @@ describe CollectionJSON do
         end
       end
 
+      expect(response.version).to eq('1.1')
       expect(response.href).to eq('/friends/')
       expect(response.links.first.href).to eq("/friends/rss")
       expect(response.link('feed').href).to eq("/friends/rss")
