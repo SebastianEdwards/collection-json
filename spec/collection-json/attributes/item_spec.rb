@@ -8,6 +8,6 @@ describe CollectionJSON::Item do
       links: [{href: 'http://www.example.com/place'}],
       data: [{name: 'full-name', value: 'phil'}]
       })
-    item.to_json.class.should eq(String)
+    expect(item.to_json.class).to eq(String)
   end
 end

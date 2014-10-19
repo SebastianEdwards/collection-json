@@ -10,7 +10,7 @@ describe CollectionJSON::URI do
     it 'returns full uri' do
       ENV['COLLECTION_JSON_HOST'] = EXAMPLE_HOST
       uri = CollectionJSON::URI.call(@href)
-      uri.should eq("http://localhost/friends")
+      expect(uri).to eq("http://localhost/friends")
     end
   end
 
@@ -18,7 +18,7 @@ describe CollectionJSON::URI do
     it 'returns partial uri' do
       ENV['COLLECTION_JSON_HOST'] = nil
       uri = CollectionJSON::URI.call(@href)
-      uri.should eq("/friends")
+      expect(uri).to eq("/friends")
     end
   end
 end

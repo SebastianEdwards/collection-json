@@ -10,6 +10,6 @@ describe CollectionJSON::Collection do
           data: [{name: 'full-name', value: 'phil'}]
         }]
       })
-    collection.to_json.class.should eq(String)
+    expect(collection.to_json.class).to eq(String)
   end
 end

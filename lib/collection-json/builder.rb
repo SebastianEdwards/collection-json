@@ -8,6 +8,10 @@ module CollectionJSON
       @collection.error params
     end
 
+    def set_version(version)
+      @collection.version version
+    end
+
     def add_link(href, rel, params = {})
       params.merge!({'rel' => rel, 'href' => href})
       @collection.links << Link.from_hash(params)
